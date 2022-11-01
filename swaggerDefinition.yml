@@ -1,22 +1,21 @@
----
 openapi: 3.0.0
 schemes:
-- http
-- https
+  - http
+  - https
 produces:
-- application/json
-- text/plain
+  - application/json
+  - text/plain
 consumes:
-- application/json
-- text/plain
+  - application/json
+  - text/plain
 info:
   title: Social API
   version: v0.1
-  description: 'The Social API is an HTTP API served by S* Team. เป็น API ที่ไว้ใช้สำหรับเชื่อมต่อกับ
-    Social Network ต่าง ๆ โดยมีการ Format เพื่อป้องกันไม่ให้เกิดความเสียหายของข้อมูล
-    เมื่อทาง Provider เปลี่ยนแปลงข้อมูลโดยไม่แจ้งเตือนล่วงหน้า
-
-    '
+  description: >
+    The Social API is an HTTP API served by S* Team. เป็น API
+    ที่ไว้ใช้สำหรับเชื่อมต่อกับ Social Network ต่าง ๆ โดยมีการ Format
+    เพื่อป้องกันไม่ให้เกิดความเสียหายของข้อมูล เมื่อทาง Provider
+    เปลี่ยนแปลงข้อมูลโดยไม่แจ้งเตือนล่วงหน้า
   x-logo:
     url: https://i.pinimg.com/originals/c5/a9/b8/c5a9b84ff1e453186a57b2a493964064.jpg
     backgroundColor: "#FFFFFF"
@@ -27,17 +26,17 @@ paths:
       summary: Get user information
       operationId: TikTokUserInfo
       produces:
-      - application/json
+        - application/json
       parameters:
-      - name: username
-        in: path
-        required: true
-        description: Unique identifier of the TikTok account (username) for whom to
-          return results.
-        schema:
-          type: string
+        - name: username
+          in: path
+          required: true
+          description: Unique identifier of the TikTok account (username) for whom to
+            return results.
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -45,17 +44,18 @@ paths:
                 type: object
                 properties:
                   data:
-                    "$ref": "#/components/schemas/TikTokUser"
+                    $ref: "#/components/schemas/TikTokUser"
                   data_version:
                     type: string
                     format: date-time
                     description: Data time at the time of the request.
-                    example: '2021-01-01T00:00:00.000Z'
+                    example: 2021-01-01T00:00:00.000Z
       x-codeSamples:
-      - lang: cURL
-        source: curl --request GET --url 'https://social-api.wisesight.dev/tiktok/users/test'
+        - lang: cURL
+          source: curl --request GET --url
+            'https://social-api.wisesight.dev/tiktok/users/test'
       tags:
-      - TikTok
+        - TikTok
 components:
   schemas:
     User:
@@ -76,8 +76,8 @@ components:
         username:
           type: string
           example:
-          - test
-          - test2
+            - test
+            - test2
     TikTokUser:
       type: object
       description: The information about this user.
@@ -85,7 +85,7 @@ components:
         id:
           type: string
           description: Unique identifier of this user.
-          example: '6532283675193802754'
+          example: "6532283675193802754"
         username:
           type: string
           description: The TikTok handle (username) of this user.
@@ -96,8 +96,8 @@ components:
           example: รัชนก สุวรรณเกตุ
         description:
           type: string
-          description: The text of this user's profile description (also known as
-            bio), if the user provided one.
+          description: The text of this user's profile description (also known as bio), if
+            the user provided one.
           example: |-
             FB : รัชนก สุวรรณเกตุ
             IG : janey_suwannaket
@@ -110,22 +110,22 @@ components:
         profile_image_url:
           type: string
           format: uri
-          description: The URL to the profile image for this user, as shown on the
-            user's profile.
+          description: The URL to the profile image for this user, as shown on the user's
+            profile.
           example: https://p16-sign-sg.tiktokcdn.com/aweme/720x720/tos-alisg-avt-0068/e1903e9d24ec6a2913af44628a7bf013.jpeg?x-expires=1613552400&x-signature=fbmyQRYg7ePlQtRTUnGsSxm9aO4%3D
         created_time:
           type: string
           format: date-time
           description: Creation time of the User.
-          example: '2018-03-13T06:23:02.000Z'
+          example: 2018-03-13T06:23:02.000Z
         verified_status:
           type: boolean
           description: Indicate if this user is a verified TikTok user.
           example: false
         private_account:
           type: boolean
-          description: Indicates if this user has chosen to protect their Videos (in
-            other words, if this user's Videos are private).
+          description: Indicates if this user has chosen to protect their Videos (in other
+            words, if this user's Videos are private).
           example: false
         statistics:
           type: object
@@ -160,5 +160,5 @@ components:
               format: int32
               nullable: true
               description: Number of Likes on other users of this User.
-              example:
+              example: null
 tags: []

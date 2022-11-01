@@ -1,4 +1,5 @@
 const swaggerJSDoc = require("swagger-jsdoc");
+const YAML = require('yaml')
 const fs = require("fs");
 
 const swaggerDefinition = {
@@ -37,5 +38,11 @@ const swaggerSpec = swaggerJSDoc(options);
 
 
 fs.writeFile("swagger.json", JSON.stringify(swaggerSpec), () => {
-    console.log("Save");
+    console.log("Save .json");
+});
+
+const doc = new YAML.Document()
+doc.contents = swaggerSpec
+fs.writeFile("swaggerDefinition.yml", doc.toString(), () => {
+  console.log("Save .yml");
 });
