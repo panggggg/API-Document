@@ -1,0 +1,379 @@
+---
+openapi: 3.0.0
+schemes:
+- http
+- https
+produces:
+- application/json
+- text/plain
+consumes:
+- application/json
+- text/plain
+info:
+  title: Social API
+  version: v0.1
+  description: 'The Social API is an HTTP API served by S* Team. เป็น API ที่ไว้ใช้สำหรับเชื่อมต่อกับ
+    Social Network ต่าง ๆ โดยมีการ Format เพื่อป้องกันไม่ให้เกิดความเสียหายของข้อมูล
+    เมื่อทาง Provider เปลี่ยนแปลงข้อมูลโดยไม่แจ้งเตือนล่วงหน้า
+
+    '
+  x-logo:
+    url: https://i.pinimg.com/originals/c5/a9/b8/c5a9b84ff1e453186a57b2a493964064.jpg
+    backgroundColor: "#FFFFFF"
+    altText: Petstore logo
+components:
+  schemas:
+    InstagramReel:
+      type: object
+      description: The information about this Reel.
+      properties:
+        id:
+          type: string
+          description: The video identifier string.
+          example: '2960487933559496187_5492163'
+paths:
+  "/instagram/location/{location_id}":
+    get:
+      summary: Instagram location info
+      description: Get Instagram location info by location id
+      produces:
+      - application/json
+      parameters:
+      - name: location_id
+        in: path
+        required: true
+        description: Identifier of the Instagram location (location_id).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - success
+                    example: success
+                  data:
+                    type: object
+                    description: Return a Instagram location info
+                    properties:
+                      id:
+                        type: string
+                        description: The location identifier string.
+                        example: '106947657857917'
+                      slug:
+                        type: string
+                        description: Tag location on Instagram.
+                        example: racha-island
+                      name:
+                        type: string
+                        description: Name of location.
+                        example: เกาะราชา Racha Island
+                      latitude:
+                        type: number
+                        description: Location latitude.
+                        example: 7.89044
+                      longitude:
+                        type: number
+                        description: Location longitude.
+                        example: 98.38981
+                      address:
+                        type: object
+                        properties:
+                          street_address:
+                            type: string
+                            description: Street Address.
+                            example: เกาะราชา
+                          zip_code:
+                            type: string
+                            description: Zip code
+                            example: ''
+                          city_name:
+                            type: string
+                            description: City name of location.
+                            example: Phuket City
+                          region_name:
+                            type: string
+                            description: Region name.
+                            example: ''
+                          country_code:
+                            type: string
+                            description: Country code
+                            example: ''
+                          exact_city_match:
+                            type: boolean
+                            description: Exact city match
+                            example: false
+                          exact_region_match:
+                            type: boolean
+                            description: Exact region match
+                            example: false
+                          exact_country_match:
+                            type: boolean
+                            description: Exact country match
+                            example: false
+                      location_pic_url:
+                        type: string
+                        description: Location picture URL
+                        example: https://instagram.fcgk29-1.fna.fbcdn.net/v/t51.2885-15/237108310_364172181858617_2752348302437723681_n.jpg?stp=c0.135.1080.1080a_dst-jpg_e15_s150x150&_nc_ht=instagram.fcgk29-1.fna.fbcdn.net&_nc_cat=105&_nc_ohc=7WL3X-yZtlAAX9zp-aa&edm=ADRwgMgBAAAA&ccb=7-5&oh=00_AfDOfZPu76bLCWWOo7TAWIpN6szpHFTBp6Xr_vnorBziSw&oe=6364496B&_nc_sid=0fd415
+                  data_version:
+                    type: string
+                    description: Data version
+                    example: '2022-10-31T05:21:31.364Z'
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    description: Message of error
+                    example: 'TypeError: Cannot read property ''id'' of null'
+      tags:
+      - Instagram
+  "/accounts/{account_id}/reels":
+    get:
+      summary: List reels by user
+      operationId: InstagramReelsListByUser
+      description: List reels from user timeline
+      produces:
+      - application/json
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        description: Unique identifier of the Instagram account (account_id) for whom
+          to return results.
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Specifies the number of Reels to try and retrieve. By default,
+          100 results are returned if this parameter is not supplied.
+        schema:
+          type: integer
+          default: 100
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - success
+                    example: success
+                  data:
+                    type: array
+                    description: Returns a variety of information about the Reel.
+                    items:
+                      "$ref": "#/components/schemas/InstagramReel"
+                  nextEndCursor:
+                    type: string
+                    description: This parameter is used to get the next 'page' of
+                      results.
+                    example: QVFCem1uODZIck5IcDhKeWZjX1JMM3ByV1BWZWxycTY2YmV1TW9OS0VSOUo0TlBMVGVoTDlvLXFLd3dYUVBqS3pIeDRKd2ZUaU91NzgzMkpjcGVKTjY2QQ==
+                  data_version:
+                    type: string
+                    format: date-time
+                    description: Data time at the time of the request.
+                    example: '2021-01-01T00:00:00.000Z'
+      tags:
+      - Instagram
+  "/youtube/channel/username/profile":
+    post:
+      summary: Youtube profile by username
+      operationId: YouTubeProfileByUsername
+      description: Get YouTube profile by channel username.
+      produces:
+      - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  description: Username of YouTube
+                  example: fedfeclip
+                request_time:
+                  type: string
+                  description: Time now
+                  example: '2022-10-31T08:51:48.402Z'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - success
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      kind:
+                        type: string
+                        example: youtube#channel
+                      etag:
+                        type: string
+                        example: UthOfn_6lfRkI_OSlvDXiosZkfM
+                      id:
+                        type: string
+                        description: Channel ID
+                        example: UC5hVaZlIDCmnfq8vC30r-sA
+                      snippet:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            description: Channel Title
+                            example: fedfeclip
+                          description:
+                            type: string
+                            description: Channel description
+                            example: |-
+                              รายการเพื่อความบันเทิงเท่านั้น ตาดู หูฟัง เสพความสุข ผ่อนคลาย สบายอารมณ์
+
+                              คำเตือน!
+                              ห้ามลอกเลียนเเบบสิ่งไม่ดี
+
+                              【 ติดต่องานเฟ็ดเฟ่ 】
+                          publishedAt:
+                            type: string
+                            example: '2011-10-27T12:26:15Z'
+                          thumbnails:
+                            type: object
+                            properties:
+                              default:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                    example: https://yt3.ggpht.com/ytc/AMLnZu8krJsMwgl5x8hINjVmTeqwXUKDwO_95j74J3pP=s88-c-k-c0x00ffffff-no-rj
+                                  width:
+                                    type: integer
+                                    example: 20
+                                  height:
+                                    type: integer
+                                    example: 20
+                              medium:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                    example: https://yt3.ggpht.com/ytc/AMLnZu8krJsMwgl5x8hINjVmTeqwXUKDwO_95j74J3pP=s88-c-k-c0x00ffffff-no-rj
+                                  width:
+                                    type: integer
+                                    example: 20
+                                  height:
+                                    type: integer
+                                    example: 20
+                              high:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                    example: https://yt3.ggpht.com/ytc/AMLnZu8krJsMwgl5x8hINjVmTeqwXUKDwO_95j74J3pP=s88-c-k-c0x00ffffff-no-rj
+                                  width:
+                                    type: integer
+                                    example: 20
+                                  height:
+                                    type: integer
+                                    example: 20
+                          localized:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                description: Channel Title
+                                example: fedfeclip
+                              description:
+                                type: string
+                                description: Channel description
+                                example: |-
+                                  รายการเพื่อความบันเทิงเท่านั้น ตาดู หูฟัง เสพความสุข ผ่อนคลาย สบายอารมณ์
+
+                                  คำเตือน!
+                                  ห้ามลอกเลียนเเบบสิ่งไม่ดี
+
+                                  【 ติดต่องานเฟ็ดเฟ่ 】
+                          country:
+                            type: string
+                            example: TH
+                      contentDetails:
+                        type: object
+                        properties:
+                          relatedPlaylists:
+                            type: object
+                            properties:
+                              likes:
+                                type: number
+                                example: 20000
+                              favorites:
+                                type: number
+                                example: 20000
+                              uploads:
+                                type: string
+                                example: UU5hVaZlIDCmnfq8vC30r-sA
+                              watchHistory:
+                                type: string
+                                example:
+                              watchLater:
+                                type: string
+                                example:
+                      statistics:
+                        type: object
+                        properties:
+                          viewCount:
+                            type: string
+                            example: '955323298'
+                          subscriberCount:
+                            type: string
+                            example: '955323298'
+                          hiddenSubscriberCount:
+                            type: string
+                            example:
+                          videoCount:
+                            type: string
+                            example: '50'
+                          commentCount:
+                            type: string
+                            example: '50'
+                  data_version:
+                    type: string
+                    example: '2022-10-31T08:51:48.402Z'
+      x-codeSamples:
+        - lang: PHP
+          source: |
+            $form = new \PetStore\Entities\Pet();
+            $form->setPetId(1);
+            $form->setPetType("Dog");
+            $form->setName("Rex");
+            // set other fields
+            try {
+                $pet = $client->pets()->update($form);
+            } catch (UnprocessableEntityException $e) {
+                var_dump($e->getErrors());
+            }
+      tags:
+      - YouTube
